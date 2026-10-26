@@ -83,7 +83,7 @@ class BridgeIntegrationTests(unittest.TestCase):
         threads=self.thread_store().list_threads(self.run)
         self.assertEqual(len(threads),3)
         self.assertTrue(all(row['title'].startswith('WF-') for row in threads))
-        hist=json.loads((self.project/'fake_state.json').read_text())['history']
+        hist=json.loads((self.project/'fake_state.json').read_text(encoding='utf-8'))['history']
         self.assertTrue(any(item['method']=='thread/resume' for item in hist))
         self.assertTrue(all(item['sandbox']['type']=='readOnly' for item in hist if item['method']=='turn/start'))
         self.assertEqual(len(list((self.project/'.workflow'/'runs'/self.run/'modules').rglob('handoff.md'))),2)
@@ -92,7 +92,7 @@ class BridgeIntegrationTests(unittest.TestCase):
         with patch.dict(os.environ,{'FAKE_CODEX_REQUEST_APPROVAL':'1'}):
             s=self.worker().next(self.run)
         self.assertEqual(s['status'],'await_understanding')
-        hist=json.loads((self.project/'fake_state.json').read_text())
+        hist=json.loads((self.project/'fake_state.json').read_text(encoding='utf-8'))
         self.assertEqual(hist['approval_responses'][0]['result'], {'decision':'decline'})
 
     def test_uncertain_turn_stays_pending(self):
@@ -119,7 +119,7 @@ class BridgeIntegrationTests(unittest.TestCase):
         ctl.next(self.run)
         thread2=self.thread_store().lookup(self.run,'evals','evals')['thread_id']
         self.assertEqual(thread1,thread2)
-        hist=json.loads((self.project/'fake_state.json').read_text())['history']
+        hist=json.loads((self.project/'fake_state.json').read_text(encoding='utf-8'))['history']
         starts=[it for it in hist if it['method']=='turn/start' and it['threadId']==thread1]
         self.assertEqual(len(starts),2)
 
