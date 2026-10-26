@@ -5,10 +5,10 @@ import sys
 from pathlib import Path
 
 storage = Path(os.environ['FAKE_CODEX_STATE'])
-state = json.loads(storage.read_text()) if storage.exists() else {"threads": {}, "history": [], "counter": 0}
+state = json.loads(storage.read_text(encoding='utf-8')) if storage.exists() else {"threads": {}, "history": [], "counter": 0}
 
 def save():
-    storage.write_text(json.dumps(state, ensure_ascii=False))
+    storage.write_text(json.dumps(state, ensure_ascii=False), encoding='utf-8')
 
 def send(message):
     sys.stdout.write(json.dumps(message, ensure_ascii=False) + '\n')
