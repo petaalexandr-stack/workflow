@@ -19,10 +19,21 @@ from typing import Any
 from ..schema import WorkflowError
 
 
+def split_codex_command(raw: str, *, windows: bool | None = None) -> list[str]:
+    """Parse a configured executable path without dropping Windows backslashes."""
+    is_windows = os.name == "nt" if windows is None else windows
+    args = shlex.split(raw, posix=not is_windows)
+    if is_windows:
+        # shlex in non-POSIX mode retains balanced surrounding quotes.
+        args = [a[1:-1] if len(a) > 1 and a[0] == a[-1] and a[0] in ("\"", "'") else a
+                for a in args]
+    return args
+
+
 class CodexAppServer:
     def __init__(self, project: Path, *, command: str | None = None, timeout: int = 600):
         self.project = Path(project).resolve()
-        self.command = shlex.split(command or os.environ.get("WORKFLOW_CODEX_COMMAND", "codex"))
+        self.command = split_codex_command(command or os.environ.get("WORKFLOW_CODEX_COMMAND", "codex"))
         if not self.command:
             raise WorkflowError("Не задана команда Codex.")
         self.timeout = timeout
