@@ -1,0 +1,15 @@
+{
+  "system_design_mode": "full",
+  "rationale": "Пример длинного маршрута для сложной системы. НЕ фиксированная схема.",
+  "risks": ["Предположения о нагрузке должны быть подтверждены пользователем"],
+  "modules": [
+    {"id":"discovery", "template":"discovery", "goal":"Исследовать требования и UX", "inputs":[]},
+    {"id":"evals", "template":"evals", "goal":"Определить проверяемые критерии", "inputs":["discovery"]},
+    {"id":"planning", "template":"planning", "goal":"Составить план", "inputs":["evals"]},
+    {"id":"system_design", "template":"system_design", "goal":"Разработать полную архитектуру", "inputs":["planning","evals"]},
+    {"id":"tasks", "template":"tasks", "goal":"Разбить архитектуру на задачи", "inputs":["system_design"]},
+    {"id":"development", "template":"development", "goal":"Реализовать систему", "inputs":["tasks"]},
+    {"id":"quality", "template":"quality", "goal":"Проверить реализацию", "inputs":["development","evals"]},
+    {"id":"documentation", "template":"documentation", "goal":"Актуализировать документацию", "inputs":["quality"]}
+  ]
+}

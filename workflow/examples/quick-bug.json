@@ -1,0 +1,6 @@
+{
+  "system_design_mode": "none",
+  "rationale": "Точечный баг не нуждается в исследованиях и полной архитектуре",
+  "risks": [],
+  "modules": ["debugging", "development", "quality", "documentation"]
+}
