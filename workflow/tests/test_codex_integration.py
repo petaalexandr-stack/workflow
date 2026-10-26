@@ -9,6 +9,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
+from workflow_engine.codex.client import split_codex_command
 from workflow_engine.codex.provider import CodexProvider
 from workflow_engine.codex.threads import ThreadStore
 from workflow_engine.controller import ModuleController
@@ -17,6 +18,18 @@ from workflow_engine.schema import WorkflowError
 from workflow_engine.store import StateStore
 
 FAKE = Path(__file__).with_name('fake_codex_app_server.py')
+
+
+class CodexCommandParsingTests(unittest.TestCase):
+    def test_windows_backslash_paths_are_preserved(self):
+        cmd = r'C:\tools\codex.exe D:\project\script.py'
+        self.assertEqual(split_codex_command(cmd, windows=True),
+                         [r'C:\tools\codex.exe', r'D:\project\script.py'])
+
+    def test_windows_quoted_path_with_spaces(self):
+        cmd = r'"C:\Program Files\Codex\codex.exe" --version'
+        self.assertEqual(split_codex_command(cmd, windows=True),
+                         [r'C:\Program Files\Codex\codex.exe', '--version'])
 
 
 class BridgeIntegrationTests(unittest.TestCase):
