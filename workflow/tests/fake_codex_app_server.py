@@ -4,6 +4,10 @@ import os
 import sys
 from pathlib import Path
 
+# Parent bridge speaks UTF-8 JSONL; Windows console defaults can differ.
+sys.stdin.reconfigure(encoding='utf-8')
+sys.stdout.reconfigure(encoding='utf-8')
+
 storage = Path(os.environ['FAKE_CODEX_STATE'])
 state = json.loads(storage.read_text(encoding='utf-8')) if storage.exists() else {"threads": {}, "history": [], "counter": 0}
 
