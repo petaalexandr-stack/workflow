@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "workflow-agent-engine"
+version = "0.7.0"
+description = "Independent approval-gated Workflow modules with Codex named chats and durable checkpoints"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+workflow = "workflow_engine.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["workflow_engine*"]
+
+[tool.setuptools.package-data]
+workflow_engine = ["config/AGENTS.md", "config/agents/*.md", "config/skills/workflow-ideas/SKILL.md"]
